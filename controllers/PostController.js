@@ -1,7 +1,5 @@
 import PostModel from '../models/Post.js';
 
-
-
 export const getAll = async (req, res) => {
   try {
     const posts = await PostModel.find().populate('user').exec();
@@ -111,18 +109,17 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
   try {
-    const postId = req.params.id;
+    const postId = req.userId;
 
     await PostModel.updateOne(
       {
-        _id: postId,
+        user: postId,
       },
       {
         title: req.body.title,
         text: req.body.text,
         imageUrl: req.body.imageUrl,
         user: req.userId,
-        tags: req.body.tags.split(','),
       },
     );
 

@@ -11,7 +11,6 @@ import { handleValidationErrors, checkAuth } from './utils/index.js';
 
 import { UserController, PostController, AboutController } from './controllers/index.js';
 
-
 const app = express();
 
 const storage = multer.diskStorage({
@@ -35,6 +34,7 @@ app.use('/uploads', express.static('uploads'));
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login);
 app.post('/auth/register', registerValidation, handleValidationErrors, UserController.register);
 app.get('/auth/me', checkAuth, UserController.getMe);
+app.get('/auth/all', UserController.getAllUsers)
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
   res.json({
@@ -42,29 +42,9 @@ app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
   });
 });
 
-
-app.get('/posts', PostController.getAll);
-app.get('/posts/:id', PostController.getOne);
-app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create);
-app.delete('/posts/:id', checkAuth, PostController.remove);
-app.patch(
-  '/posts/:id',
-  checkAuth,
-  postCreateValidation,
-  handleValidationErrors,
-  PostController.update,
-);
-
-
-app.get('/about', AboutController.getAbout);
+app.get('/about/all', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);
-app.patch(
-  '/about',
-  checkAuth,
-  aboutValidation,
-  handleValidationErrors,
-  AboutController.updateAbout,
-);
+app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, AboutController.updateAbout);
 
 app.listen(4444, (err) => {
   if (err) {
@@ -73,3 +53,16 @@ app.listen(4444, (err) => {
 
   console.log('Server OK');
 });
+
+
+// app.get('/posts', PostController.getAll);
+// app.get('/posts/:id', PostController.getOne);
+// app.post('/posts', checkAuth, postCreateValidation, handleValidationErrors, PostController.create);
+// app.delete('/posts/:id', checkAuth, PostController.remove);
+// app.patch(
+//   '/posts/:id',
+//   checkAuth,
+//   postCreateValidation,
+//   handleValidationErrors,
+//   PostController.update,
+// );

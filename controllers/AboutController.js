@@ -5,6 +5,7 @@ import AboutModel from '../models/About.js';
 export const getAbout = async (req, res) => {
   try {
     const about = await AboutModel.find().populate('_id').exec();
+
     res.json(about);
   } catch (err) {
     console.log(err);
@@ -16,6 +17,7 @@ export const getAbout = async (req, res) => {
 
 export const createAbout = async (req, res) => {
   try {
+
     const doc = new AboutModel({
       livesIn: req.body.livesIn,
       from: req.body.from,
@@ -39,8 +41,12 @@ export const createAbout = async (req, res) => {
 
 export const updateAbout = async (req, res) => {
   try {
-
+    const aboutId = req.userId;
+    
     await AboutModel.updateOne(
+      {
+        user: aboutId,
+      },
       {
         livesIn: req.body.livesIn,
         from: req.body.from,

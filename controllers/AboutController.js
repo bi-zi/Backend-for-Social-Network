@@ -1,7 +1,5 @@
 import AboutModel from '../models/About.js';
 
-
-
 export const getAbout = async (req, res) => {
   try {
     const about = await AboutModel.find().populate('_id').exec();
@@ -42,8 +40,8 @@ export const createAbout = async (req, res) => {
 export const updateAbout = async (req, res) => {
   try {
     const aboutId = req.userId;
-    
-    await AboutModel.updateOne(
+
+     await AboutModel.updateOne(
       {
         user: aboutId,
       },
@@ -57,8 +55,9 @@ export const updateAbout = async (req, res) => {
         user: req.userId,
       },
     );
+
     res.json({
-      success: true,
+      "success": true
     });
   } catch (err) {
     console.log(err);

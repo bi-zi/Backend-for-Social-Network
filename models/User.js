@@ -15,10 +15,17 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    imageUrl: {
+      type: String,
+      required: false
+    }
   },
   {
     timestamps: true,
   },
 );
+
+
 
 export default mongoose.model('User', UserSchema);

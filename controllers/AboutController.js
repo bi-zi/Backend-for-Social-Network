@@ -41,7 +41,7 @@ export const updateAbout = async (req, res) => {
   try {
     const aboutId = req.userId;
 
-     await AboutModel.updateOne(
+    await AboutModel.updateOne(
       {
         user: aboutId,
       },

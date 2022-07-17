@@ -22,17 +22,14 @@ export const getAllUsers = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-
-
-   const user= await UserSchema.findOne({ email: req.body.email }).updateOne({ $push: { avatarUrl: req.body.avatarUrl, } });
-
-
-
-
-
-
+    const aboutId = req.userId;
+    await UserSchema.updateOne({
+      user: aboutId,
+    },
+      { $set: { imageUrl: req.body.imageUrl } },
+    );
     res.json({
-      user
+      "success": true
     });
   } catch (err) {
     console.log(err);

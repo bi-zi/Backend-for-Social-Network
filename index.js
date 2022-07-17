@@ -5,11 +5,10 @@ import cors from 'cors';
 
 import mongoose from 'mongoose';
 
-import { registerValidation, loginValidation, postCreateValidation, aboutValidation } from './validations.js';
-
+import { registerValidation, loginValidation, aboutValidation, sliderValidation } from './validations.js';
 import { handleValidationErrors, checkAuth } from './utils/index.js';
 
-import { AuthController, UserController, PostController, AboutController } from './controllers/index.js';
+import { AuthController, UserController, AboutController, SliderController } from './controllers/index.js';
 
 
 const app = express();
@@ -37,11 +36,15 @@ app.post('/auth/register', registerValidation, handleValidationErrors, AuthContr
 app.get('/auth/me', checkAuth, AuthController.getMe);
 
 app.get('/user/all', UserController.getAllUsers)
-app.patch('/user/:id', checkAuth, registerValidation, handleValidationErrors, UserController.updateUser);
+app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
 
 app.get('/about/all', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);
 app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, AboutController.updateAbout);
+
+app.get('/slider/all', SliderController.getSlider);
+app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
+app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
 
 
 

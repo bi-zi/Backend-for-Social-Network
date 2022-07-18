@@ -19,6 +19,22 @@ export const getAllUsers = async (req, res) => {
 
 };
 
+export const getOneUser = async (req, res) => {
+  try {
+    const aboutId = req.userId;
+    const user = await UserSchema.find().populate(aboutId).exec();
+    res.json(user);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+
+};
+
 
 export const updateUser = async (req, res) => {
   try {

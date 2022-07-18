@@ -37,6 +37,7 @@ app.get('/auth/me', checkAuth, AuthController.getMe);
 
 app.get('/user/all', UserController.getAllUsers)
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
+app.get('/user/one/:id', UserController.getAllUsers)
 
 app.get('/about/all', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);
@@ -45,7 +46,7 @@ app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, Abou
 app.get('/slider/all', SliderController.getSlider);
 app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
 app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
-
+app.get('/slider/delete/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.deleteImgInSlider);
 
 
 app.listen(4444, (err) => {

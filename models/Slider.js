@@ -6,6 +6,10 @@ const SliderSchema = new mongoose.Schema(
       type: Array,
       required: false
     },
+    deleteId: {
+      type: Number,
+      required: false
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

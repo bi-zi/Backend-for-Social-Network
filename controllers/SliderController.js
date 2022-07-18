@@ -51,3 +51,20 @@ export const pushSlider = async (req, res) => {
     });
   }
 };
+
+export const deleteImgInSlider = async (req, res) => {
+  try {
+    const aboutId = req.userId;
+    var deleteId = req.body.deleteId;
+
+
+
+  res.json({
+  });
+} catch (err) {
+  console.log(err);
+  res.status(500).json({
+    message: 'Не удалось создать информацию',
+  });
+}
+};

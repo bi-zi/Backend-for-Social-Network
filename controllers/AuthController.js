@@ -12,7 +12,7 @@ export const register = async (req, res) => {
     const doc = new UserSchema({
       email: req.body.email,
       fullName: req.body.fullName,
-      imageUrl: '',
+      imageUrl: ['https://okeygeek.ru/wp-content/uploads/2020/03/no_avatar.png'],
       passwordHash: hash,
     });
 

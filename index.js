@@ -8,7 +8,8 @@ import mongoose from 'mongoose';
 import { registerValidation, loginValidation, aboutValidation, sliderValidation } from './validations.js';
 import { handleValidationErrors, checkAuth } from './utils/index.js';
 
-import { AuthController, UserController, AboutController, SliderController } from './controllers/index.js';
+import { AuthController, UserController, AboutController, SliderController, PostController } from './controllers/index.js';
+
 
 
 const app = express();
@@ -48,6 +49,11 @@ app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderC
 app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
 app.get('/slider/delete/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.deleteImgInSlider);
 
+
+app.get('/post/get/userPostsAll/:id', handleValidationErrors, PostController.userPostsAll);
+app.post('/post/post/createPost/:id', checkAuth, handleValidationErrors, PostController.createPost);
+app.patch('/post/push/pushPost/:id', checkAuth, handleValidationErrors, PostController.pushPost);
+app.patch('/post/like/:id', handleValidationErrors, PostController.likePost);
 
 app.listen(4444, (err) => {
   if (err) {

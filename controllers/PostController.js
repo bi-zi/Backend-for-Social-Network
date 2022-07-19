@@ -1,8 +1,11 @@
+import { text } from 'express';
 import PostModel from '../models/Post.js';
+import mongoose from 'mongoose';
 
-export const getAll = async (req, res) => {
+export const userPostsAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate('user').exec();
+    const aboutId = req.userId;
+    const posts = await PostModel.find().populate(aboutId).exec();
     res.json(posts);
   } catch (err) {
     console.log(err);
@@ -11,6 +14,115 @@ export const getAll = async (req, res) => {
     });
   }
 };
+
+export const createPost = async (req, res) => {
+  try {
+
+    const doc = new PostModel({
+      post: [
+        {
+          text: req.body.text,
+          imagesPost: req.body.imagesPost,
+          videoPost: req.body.videoPost,
+          commentPost: req.body.commentPost,
+          likePost: req.body.likePost,
+          dislikePost: req.body.dislikePost,
+          viewsCount: req.body.viewsCount,
+          id: mongoose.Types.ObjectId()
+        }
+      ],
+      user: req.userId,
+    });
+
+    const post = await doc.save();
+
+    res.json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось создать статью',
+    });
+  }
+};
+
+
+export const pushPost = async (req, res) => {
+  try {
+    const aboutId = req.userId;
+
+    await PostModel.updateOne({
+      user: aboutId,
+    },
+      {
+        $push: {
+          post: {
+
+            text: req.body.text,
+            imagesPost: req.body.imagesPost,
+            videoPost: req.body.videoPost,
+            commentPost: req.body.commentPost,
+            likePost: req.body.likePost,
+            dislikePost: req.body.dislikePost,
+            viewsCount: req.body.viewsCount,
+            id: mongoose.Types.ObjectId()
+
+          }
+        }
+      },
+    );
+    res.json({
+      "success": true
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось создать информацию',
+    });
+  }
+};
+
+
+export const likePost = async (req, res) => {
+  try {
+    const aboutId = req.userId;
+    const user = await PostModel.findOneAndUpdate(
+      {
+        aboutId,
+      }, {
+      post: { ...PostModel }
+    }
+    )
+
+
+    // await PostModel.updateOne({
+    //   user: aboutId,
+    // },
+    //   {
+    //       post: {
+    //         text: req.body.text,
+    //         imagesPost: req.body.imagesPost,
+    //         videoPost: req.body.videoPost,
+    //         commentPost: req.body.commentPost,
+    //         likePost: req.body.likePost,
+    //         dislikePost: req.body.dislikePost,
+    //         viewsCount: req.body.viewsCount,
+    //         id: mongoose.Types.ObjectId()
+    //       }
+
+    //   },
+    // );
+
+    res.json({
+      user
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось создать информацию',
+    });
+  }
+};
+
 
 export const getOne = async (req, res) => {
   try {
@@ -26,6 +138,7 @@ export const getOne = async (req, res) => {
       {
         returnDocument: 'after',
       },
+
       (err, doc) => {
         if (err) {
           console.log(err);
@@ -50,6 +163,9 @@ export const getOne = async (req, res) => {
     });
   }
 };
+
+
+
 
 export const remove = async (req, res) => {
   try {
@@ -82,54 +198,6 @@ export const remove = async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: 'Не удалось получить статьи',
-    });
-  }
-};
-
-export const create = async (req, res) => {
-  try {
-    const doc = new PostModel({
-      title: req.body.title,
-      text: req.body.text,
-      imageUrl: req.body.imageUrl,
-      // tags: req.body.tags.split(','),
-      user: req.userId,
-    });
-
-    const post = await doc.save();
-
-    res.json(post);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: 'Не удалось создать статью',
-    });
-  }
-};
-
-export const update = async (req, res) => {
-  try {
-    const postId = req.userId;
-
-    await PostModel.updateOne(
-      {
-        user: postId,
-      },
-      {
-        title: req.body.title,
-        text: req.body.text,
-        imageUrl: req.body.imageUrl,
-        user: req.userId,
-      },
-    );
-
-    res.json({
-      success: true,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: 'Не удалось обновить статью',
     });
   }
 };

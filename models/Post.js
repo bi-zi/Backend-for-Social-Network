@@ -2,29 +2,55 @@ import mongoose from 'mongoose';
 
 const PostSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    // tags: {
-    //   type: Array,
-    //   default: [],
-    // },
-    viewsCount: {
-      type: Number,
-      default: 0,
+    post: {
+      type: Array,
+
+      text: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      imagesPost: {
+        type: Array,
+        required: true,
+        default: [],
+      },
+
+      videoPost: {
+        type: String,
+        required: true,
+        default: '',
+      },
+      commentPost: {
+        type: Array,
+        required: true,
+        default: [],
+      },
+      likePost: {
+        type: Number,
+        required: true,
+        default: '0',
+      },
+      dislikePost: {
+        type: Number,
+        required: true,
+        default: '0',
+      },
+      viewsCount: {
+        type: Number,
+        required: true,
+        default: 0,
+      },
+      id: {
+        type: String,
+        required: true,
+      },
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-    imageUrl: String,
   },
   {
     timestamps: true,

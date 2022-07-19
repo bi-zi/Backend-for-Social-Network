@@ -24,3 +24,12 @@ export const aboutValidation = [
 export const sliderValidation = [
   body('sliderImg', 'Неверная ссылка на аватарку'),
 ];
+
+// export const PostValidation = [
+//   body('text', 'Укажите город вашего проживания').isLength({ min: 2 }),
+//   body('imagesPost', 'Укажите из какой вы страны').isLength({ min: 2 }),
+//   body('videoPost', 'Укажите где вы родились').isLength({ min: 2 }),
+//   body('commentPost', 'Укажите вашу профессию').isLength({ min: 2 }),
+//   body('relations', 'Укажите с кем вы в отношениях').isLength({ min: 2 }),
+//   body('studentAt', 'Укажите где вы учитесь').isLength({ min: 2 }),
+// ];

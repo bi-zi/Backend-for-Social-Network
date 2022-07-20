@@ -28,6 +28,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+
 app.use(express.json());
 app.use(cors());
 
@@ -50,16 +51,18 @@ app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationError
 app.get('/slider/delete/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.deleteImgInSlider);
 
 
-app.get('/post/get/userPostsAll/:id', handleValidationErrors, PostController.userPostsAll);
-app.post('/post/post/createPost/:id', checkAuth, handleValidationErrors, PostController.createPost);
-app.patch('/post/push/pushPost/:id', checkAuth, handleValidationErrors, PostController.pushPost);
+app.get('/post/userPostsAll/:id', handleValidationErrors, PostController.userPostsAll);
+app.post('/post/createPost', checkAuth, handleValidationErrors, PostController.createPost);
+app.patch('/post/PostPush/:id', checkAuth, handleValidationErrors, PostController.pushPost);
 app.patch('/post/like/:id', handleValidationErrors, PostController.likePost);
+app.patch('/post/dislike/:id', handleValidationErrors, PostController.dislikePost);
+
+
 
 app.listen(4444, (err) => {
   if (err) {
     return console.log(err);
   }
-
   console.log('Server OK');
 });
 

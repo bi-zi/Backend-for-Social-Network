@@ -10,16 +10,15 @@ const PostSchema = new mongoose.Schema(
         required: true,
         default: '',
       },
-      imagesPost: {
-        type: Array,
-        required: true,
-        default: [],
-      },
-
       videoPost: {
         type: String,
         required: true,
         default: '',
+      },
+      imagesPost: {
+        type: Array,
+        required: true,
+        default: [],
       },
       commentPost: {
         type: Array,
@@ -36,13 +35,13 @@ const PostSchema = new mongoose.Schema(
         required: true,
         default: '0',
       },
-      viewsCount: {
-        type: Number,
-        required: true,
-        default: 0,
-      },
-      id: {
+      date: {
         type: String,
+        required: true
+      },
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: '_id',
         required: true,
       },
     },

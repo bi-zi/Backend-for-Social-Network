@@ -17,18 +17,20 @@ export const userPostsAll = async (req, res) => {
 
 export const createPost = async (req, res) => {
   try {
+    let d = new Date();
+    d = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
 
     const doc = new PostModel({
       post: [
         {
           text: req.body.text,
-          imagesPost: req.body.imagesPost,
           videoPost: req.body.videoPost,
-          commentPost: req.body.commentPost,
-          likePost: req.body.likePost,
-          dislikePost: req.body.dislikePost,
-          viewsCount: req.body.viewsCount,
-          id: mongoose.Types.ObjectId()
+          imagesPost: req.body.imagesPost,
+          commentPost: [],
+          likePost: 0,
+          dislikePost: 0,
+          date: d,
+          _id: mongoose.Types.ObjectId()
         }
       ],
       user: req.userId,
@@ -49,6 +51,8 @@ export const createPost = async (req, res) => {
 export const pushPost = async (req, res) => {
   try {
     const aboutId = req.userId;
+    let d = new Date();
+    d = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
 
     await PostModel.updateOne({
       user: aboutId,
@@ -58,14 +62,13 @@ export const pushPost = async (req, res) => {
           post: {
 
             text: req.body.text,
-            imagesPost: req.body.imagesPost,
             videoPost: req.body.videoPost,
-            commentPost: req.body.commentPost,
-            likePost: req.body.likePost,
-            dislikePost: req.body.dislikePost,
-            viewsCount: req.body.viewsCount,
-            id: mongoose.Types.ObjectId()
-
+            imagesPost: req.body.imagesPost,
+            commentPost: [],
+            likePost: 0,
+            dislikePost: 0,
+            date: d,
+            _id: mongoose.Types.ObjectId()
           }
         }
       },
@@ -84,37 +87,28 @@ export const pushPost = async (req, res) => {
 
 export const likePost = async (req, res) => {
   try {
+    let ObjectId = mongoose.Types.ObjectId
+    const id = req.body._id
     const aboutId = req.userId;
-    const user = await PostModel.findOneAndUpdate(
-      {
-        aboutId,
-      }, {
-      post: { ...PostModel }
-    }
-    )
+    let a = "62d7ce16aa9c6f1def4d4eaf"
+    PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $inc: { "post.$.likePost": 1 } },
+      (err, doc) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({
+          message: 'Не удалось вернуть статью',
+        });
+      }
 
+      if (!doc) {
+        return res.status(404).json({
+          message: 'Статья не найдена',
+        });
+      }
 
-    // await PostModel.updateOne({
-    //   user: aboutId,
-    // },
-    //   {
-    //       post: {
-    //         text: req.body.text,
-    //         imagesPost: req.body.imagesPost,
-    //         videoPost: req.body.videoPost,
-    //         commentPost: req.body.commentPost,
-    //         likePost: req.body.likePost,
-    //         dislikePost: req.body.dislikePost,
-    //         viewsCount: req.body.viewsCount,
-    //         id: mongoose.Types.ObjectId()
-    //       }
+      res.json(doc);
+      });
 
-    //   },
-    // );
-
-    res.json({
-      user
-    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -123,6 +117,37 @@ export const likePost = async (req, res) => {
   }
 };
 
+export const dislikePost = async (req, res) => {
+  try {
+    let ObjectId = mongoose.Types.ObjectId
+    const id = req.body._id
+    const aboutId = req.userId;
+    let a = "62d7ce16aa9c6f1def4d4eaf"
+    PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $inc: { "post.$.dislikePost": 1 } },
+      (err, doc) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            message: 'Не удалось вернуть статью',
+          });
+        }
+
+        if (!doc) {
+          return res.status(404).json({
+            message: 'Статья не найдена',
+          });
+        }
+
+        res.json(doc);
+      });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось создать информацию',
+    });
+  }
+};
 
 export const getOne = async (req, res) => {
   try {

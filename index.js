@@ -12,8 +12,6 @@ import { AuthController, UserController, AboutController, SliderController, Post
 
 
 
-const app = express();
-
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
     if (!fs.existsSync('uploads')) {
@@ -56,7 +54,7 @@ app.post('/post/createPost', checkAuth, handleValidationErrors, PostController.c
 app.patch('/post/PostPush/:id', checkAuth, handleValidationErrors, PostController.pushPost);
 app.patch('/post/like/:id', handleValidationErrors, PostController.likePost);
 app.patch('/post/dislike/:id', handleValidationErrors, PostController.dislikePost);
-
+app.patch('/post/commentPush/:id', handleValidationErrors, PostController.pushComment);
 
 
 app.listen(4444, (err) => {

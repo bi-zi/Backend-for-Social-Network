@@ -1,4 +1,3 @@
-import { text } from 'express';
 import PostModel from '../models/Post.js';
 import mongoose from 'mongoose';
 
@@ -93,20 +92,20 @@ export const likePost = async (req, res) => {
     let a = "62d7ce16aa9c6f1def4d4eaf"
     PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $inc: { "post.$.likePost": 1 } },
       (err, doc) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({
-          message: 'Не удалось вернуть статью',
-        });
-      }
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            message: 'Не удалось вернуть статью',
+          });
+        }
 
-      if (!doc) {
-        return res.status(404).json({
-          message: 'Статья не найдена',
-        });
-      }
+        if (!doc) {
+          return res.status(404).json({
+            message: 'Статья не найдена',
+          });
+        }
 
-      res.json(doc);
+        res.json(doc);
       });
 
   } catch (err) {
@@ -149,21 +148,18 @@ export const dislikePost = async (req, res) => {
   }
 };
 
-export const getOne = async (req, res) => {
+export const pushComment = async (req, res) => {
   try {
-    const postId = req.params.id;
+    let ObjectId = mongoose.Types.ObjectId
+    const id = req.body._id
+    const aboutId = req.userId;
 
-    PostModel.findOneAndUpdate(
-      {
-        _id: postId,
-      },
-      {
-        $inc: { viewsCount: 1 },
-      },
-      {
-        returnDocument: 'after',
-      },
+    let d = new Date();
+    d = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
 
+
+    let a = "62d7ce16aa9c6f1def4d4eaf"
+    PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $push: { "post.$.commentPost": [req.body.text, d], } },
       (err, doc) => {
         if (err) {
           console.log(err);
@@ -179,12 +175,12 @@ export const getOne = async (req, res) => {
         }
 
         res.json(doc);
-      },
-    ).populate('user');
+      });
+
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: 'Не удалось создать информацию',
     });
   }
 };

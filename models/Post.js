@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 const PostSchema = new mongoose.Schema(
   {
+    deleteId: {
+      type: Number,
+      required: false
+    },
     post: {
       type: Array,
 

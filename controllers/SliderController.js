@@ -55,16 +55,34 @@ export const pushSlider = async (req, res) => {
 export const deleteImgInSlider = async (req, res) => {
   try {
     const aboutId = req.userId;
-    var deleteId = req.body.deleteId;
+    const index = req.body.deleteId
+    const sliderInd = `sliderImg.${index}`
 
+    await SliderModel.updateOne({ aboutId }, { $unset: { [sliderInd]: 1 } })
+    SliderModel.updateOne({ aboutId }, { $pull: { "sliderImg": null } },
+      (err, doc) => {
 
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            message: 'Не удалось вернуть статью',
+          });
+        }
 
-  res.json({
-  });
-} catch (err) {
-  console.log(err);
-  res.status(500).json({
-    message: 'Не удалось создать информацию',
-  });
-}
+        if (!doc) {
+          return res.status(404).json({
+            message: 'Статья не найдена',
+          });
+        }
+
+        res.json(doc);
+      });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось создать информацию',
+    });
+  }
+
 };

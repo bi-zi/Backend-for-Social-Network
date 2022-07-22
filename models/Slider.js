@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const SliderSchema = new mongoose.Schema(
-{
+  {
     sliderImg: {
       type: Array,
       required: false

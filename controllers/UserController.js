@@ -22,7 +22,9 @@ export const getAllUsers = async (req, res) => {
 export const getOneUser = async (req, res) => {
   try {
     const aboutId = req.userId;
-    const user = await UserSchema.find().populate(aboutId).exec();
+    const id = req.body._id
+
+    const user = await UserSchema.findOne(id)
     res.json(user);
 
   } catch (err) {

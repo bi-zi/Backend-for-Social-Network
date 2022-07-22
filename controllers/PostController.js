@@ -89,7 +89,6 @@ export const likePost = async (req, res) => {
     let ObjectId = mongoose.Types.ObjectId
     const id = req.body._id
     const aboutId = req.userId;
-    let a = "62d7ce16aa9c6f1def4d4eaf"
     PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $inc: { "post.$.likePost": 1 } },
       (err, doc) => {
         if (err) {
@@ -186,21 +185,20 @@ export const pushComment = async (req, res) => {
 };
 
 
-
-
-export const remove = async (req, res) => {
+export const deleteUserPost = async (req, res) => {
   try {
-    const postId = req.params.id;
+    let ObjectId = mongoose.Types.ObjectId
+    const index = req.body.deleteId
+    const aboutId = req.userId;
 
-    PostModel.findOneAndDelete(
-      {
-        _id: postId,
-      },
+    await PostModel.updateOne({ aboutId: { $unset: { "post._id": index } } })
+    PostModel.updateOne({ aboutId }, { $pull: { "post": null } },
       (err, doc) => {
+
         if (err) {
           console.log(err);
           return res.status(500).json({
-            message: 'Не удалось удалить статью',
+            message: 'Не удалось вернуть статью',
           });
         }
 
@@ -210,15 +208,14 @@ export const remove = async (req, res) => {
           });
         }
 
-        res.json({
-          success: true,
-        });
-      },
-    );
+        res.json(doc);
+      });
+
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: 'Не удалось получить статьи',
+      message: 'Не удалось создать информацию',
     });
   }
+
 };

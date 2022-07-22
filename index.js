@@ -36,8 +36,9 @@ app.post('/auth/register', registerValidation, handleValidationErrors, AuthContr
 app.get('/auth/me', checkAuth, AuthController.getMe);
 
 app.get('/user/all', UserController.getAllUsers)
+app.get('/user/one/:id', UserController.getOneUser)
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
-app.get('/user/one/:id', UserController.getAllUsers)
+
 
 app.get('/about/all', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);
@@ -46,7 +47,7 @@ app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, Abou
 app.get('/slider/all', SliderController.getSlider);
 app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
 app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
-app.get('/slider/delete/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.deleteImgInSlider);
+app.patch('/slider/delete/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.deleteImgInSlider);
 
 
 app.get('/post/userPostsAll/:id', handleValidationErrors, PostController.userPostsAll);
@@ -55,7 +56,7 @@ app.patch('/post/PostPush/:id', checkAuth, handleValidationErrors, PostControlle
 app.patch('/post/like/:id', handleValidationErrors, PostController.likePost);
 app.patch('/post/dislike/:id', handleValidationErrors, PostController.dislikePost);
 app.patch('/post/commentPush/:id', handleValidationErrors, PostController.pushComment);
-
+app.patch('/post/deletePost/:id', checkAuth, handleValidationErrors, PostController.deleteUserPost);
 
 app.listen(4444, (err) => {
   if (err) {

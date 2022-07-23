@@ -157,8 +157,23 @@ export const pushComment = async (req, res) => {
     d = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
 
 
-    let a = "62d7ce16aa9c6f1def4d4eaf"
-    PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $push: { "post.$.commentPost": [req.body.text, d], } },
+    PostModel.updateOne(
+      {
+        aboutId,
+        "post._id": ObjectId(id)
+      },
+      {
+        $push:
+        {
+          "post.$.commentPost": {
+            fullName: req.body.fullName,
+            avatar: req.body.avatar,
+            commentText: req.body.commentText,
+            commentDate: req.body.commentDate,
+            userId: req.body.userId
+          },
+        }
+      },
       (err, doc) => {
         if (err) {
           console.log(err);
@@ -187,11 +202,11 @@ export const pushComment = async (req, res) => {
 
 export const deleteUserPost = async (req, res) => {
   try {
-    let ObjectId = mongoose.Types.ObjectId
     const index = req.body.deleteId
     const aboutId = req.userId;
+    const postInd = `post.${index}`
 
-    await PostModel.updateOne({ aboutId: { $unset: { "post._id": index } } })
+    await PostModel.updateOne({ aboutId }, { $unset: { [postInd]: 1 } })
     PostModel.updateOne({ aboutId }, { $pull: { "post": null } },
       (err, doc) => {
 

@@ -11,6 +11,7 @@ import { handleValidationErrors, checkAuth } from './utils/index.js';
 import { AuthController, UserController, AboutController, SliderController, PostController } from './controllers/index.js';
 
 
+const app = express();
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -38,7 +39,7 @@ app.get('/auth/me', checkAuth, AuthController.getMe);
 app.get('/user/all', UserController.getAllUsers)
 app.get('/user/one/:id', UserController.getOneUser)
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
-
+app.patch("/user/subscribe/:id", handleValidationErrors, UserController.subscribeUser)
 
 app.get('/about/all', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);

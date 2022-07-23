@@ -15,7 +15,28 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    friends: {
+      type: Array,
+      required: true,
 
+      userId: {
+        type: String,
+        required: false,
+        default: ''
+      },
+
+    },
+    subscribers: {
+      type: Array,
+      required: true,
+
+      userId: {
+        type: String,
+        required: false,
+        default: ''
+      },
+
+    },
     imageUrl: {
       type: Array,
       required: false

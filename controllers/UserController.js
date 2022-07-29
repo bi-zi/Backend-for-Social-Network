@@ -1,7 +1,4 @@
-import UserModel from '../models/User.js';
 import UserSchema from '../models/User.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 export const getAllUsers = async (req, res) => {
@@ -70,10 +67,12 @@ export const updateUser = async (req, res) => {
 export const subscribeUser = async (req, res) => {
   try {
     const aboutId = req.userId;
-    const id = req.params.id
+    const hex = /[0-9A-Fa-f]{6}/g;
     let ObjectId = mongoose.Types.ObjectId
+    const id = (req.params.id)
 
-    UserSchema.updateOne({ "_id": ObjectId(id) }, { $push: { subscribers: req.body.userId }, }, (err, doc) => {
+
+    UserSchema.updateOne({}, { $push: { subscribers: req.body.userId }, }, (err, doc) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -86,7 +85,6 @@ export const subscribeUser = async (req, res) => {
           message: 'Статья не найдена',
         });
       }
-
       res.json(doc);
     });
   } catch (err) {

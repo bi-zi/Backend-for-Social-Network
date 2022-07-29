@@ -1,4 +1,5 @@
 import SliderModel from '../models/Slider.js';
+import mongoose from 'mongoose';
 
 export const getSlider = async (req, res) => {
   try {
@@ -37,7 +38,7 @@ export const pushSlider = async (req, res) => {
     const aboutId = req.userId;
 
     await SliderModel.updateOne({
-      user: aboutId,
+      "user": aboutId,
     },
       { $push: { sliderImg: req.body.sliderImg } },
     );
@@ -57,9 +58,11 @@ export const deleteImgInSlider = async (req, res) => {
     const aboutId = req.userId;
     const index = req.body.deleteId
     const sliderInd = `sliderImg.${index}`
+    const id = req.params.id
+    let ObjectId = mongoose.Types.ObjectId
 
-    await SliderModel.updateOne({ aboutId }, { $unset: { [sliderInd]: 1 } })
-    SliderModel.updateOne({ aboutId }, { $pull: { "sliderImg": null } },
+    await SliderModel.updateOne({ "user": aboutId }, { $unset: { [sliderInd]: 1 } })
+    SliderModel.updateOne({ "user": aboutId }, { $pull: { "sliderImg": null } },
       (err, doc) => {
 
         if (err) {

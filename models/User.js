@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema(
 
       userId: {
         type: String,
-        required: false,
+        required: true,
         default: ''
       },
 

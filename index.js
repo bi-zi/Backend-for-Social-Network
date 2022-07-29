@@ -11,25 +11,11 @@ import { handleValidationErrors, checkAuth } from './utils/index.js';
 import { AuthController, UserController, AboutController, SliderController, PostController } from './controllers/index.js';
 
 
+
 const app = express();
 
-const storage = multer.diskStorage({
-  destination: (_, __, cb) => {
-    if (!fs.existsSync('uploads')) {
-      fs.mkdirSync('uploads');
-    }
-    cb(null, 'uploads');
-  },
-  filename: (_, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
 
-const upload = multer({ storage });
-
-
-app.use(express.json());
-app.use(cors());
+app.use(express.json({limit: '1mb'}), cors());
 
 
 app.post('/auth/login', loginValidation, handleValidationErrors, AuthController.login);
@@ -46,9 +32,9 @@ app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutCont
 app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, AboutController.updateAbout);
 
 app.get('/slider/all', SliderController.getSlider);
-app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
-app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
-app.patch('/slider/delete/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.deleteImgInSlider);
+app.post('/slider',checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
+app.patch('/slider/push/:id',checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
+app.patch('/slider/delete/:id', checkAuth, handleValidationErrors, SliderController.deleteImgInSlider);
 
 
 app.get('/post/userPostsAll/:id', handleValidationErrors, PostController.userPostsAll);

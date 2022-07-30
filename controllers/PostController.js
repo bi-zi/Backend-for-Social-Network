@@ -187,7 +187,6 @@ export const pushComment = async (req, res) => {
             message: 'Статья не найдена',
           });
         }
-
         res.json(doc);
       });
 
@@ -206,8 +205,8 @@ export const deleteUserPost = async (req, res) => {
     const aboutId = req.userId;
     const postInd = `post.${index}`
 
-    await PostModel.updateOne({ aboutId }, { $unset: { [postInd]: 1 } })
-    PostModel.updateOne({ aboutId }, { $pull: { "post": null } },
+    await PostModel.updateOne({"user": aboutId }, { $unset: { [postInd]: 1 } })
+    PostModel.updateOne({ "user": aboutId }, { $pull: { "post": null } },
       (err, doc) => {
 
         if (err) {

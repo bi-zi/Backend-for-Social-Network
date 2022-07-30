@@ -19,8 +19,14 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       required: true,
 
-      userId: {
+      id: {
         type: String,
+        required: false,
+        default: ''
+      },
+
+      index: {
+        type: Number,
         required: false,
         default: ''
       },
@@ -30,7 +36,13 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       required: true,
 
-      userId: {
+      id: {
+        type: String,
+        required: true,
+        default: ''
+      },
+
+      authUserId: {
         type: String,
         required: true,
         default: ''

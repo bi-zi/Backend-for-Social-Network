@@ -12,6 +12,7 @@ import { AuthController, UserController, AboutController, SliderController, Post
 
 
 
+
 const app = express();
 
 
@@ -22,19 +23,26 @@ app.post('/auth/login', loginValidation, handleValidationErrors, AuthController.
 app.post('/auth/register', registerValidation, handleValidationErrors, AuthController.register);
 app.get('/auth/me', checkAuth, AuthController.getMe);
 
+
+
 app.get('/user/all', UserController.getAllUsers)
 app.get('/user/one/:id', UserController.getOneUser)
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
 app.patch("/user/subscribe/:id", handleValidationErrors, UserController.subscribeUser)
+app.patch("/user/friend/:id", checkAuth, handleValidationErrors, UserController.acceptFriend)
+
 
 app.get('/about/all', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);
 app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, AboutController.updateAbout);
 
+
+
 app.get('/slider/all', SliderController.getSlider);
 app.post('/slider',checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
 app.patch('/slider/push/:id',checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
 app.patch('/slider/delete/:id', checkAuth, handleValidationErrors, SliderController.deleteImgInSlider);
+
 
 
 app.get('/post/userPostsAll/:id', handleValidationErrors, PostController.userPostsAll);

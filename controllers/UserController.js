@@ -67,12 +67,7 @@ export const updateUser = async (req, res) => {
 export const subscribeUser = async (req, res) => {
   try {
     const aboutId = req.userId;
-    const hex = /[0-9A-Fa-f]{6}/g;
-    let ObjectId = mongoose.Types.ObjectId
-    const id = (req.params.id)
-
-
-    UserSchema.updateOne({}, { $push: { subscribers: req.body.userId }, }, (err, doc) => {
+    UserSchema.updateOne({ "_id": req.body.id }, { $push: { subscribers: req.body.authUserId }, }, (err, doc) => {
       if (err) {
         console.log(err);
         return res.status(500).json({
@@ -85,8 +80,44 @@ export const subscribeUser = async (req, res) => {
           message: 'Статья не найдена',
         });
       }
+      console.log(req.body.id, req.body.authUserId)
       res.json(doc);
     });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось обновить fdf',
+    });
+  }
+};
+
+
+export const acceptFriend = async (req, res) => {
+  try {
+    const aboutId = req.userId;
+    const index = req.body.index
+    const subInd = `subscribers.${index}`
+    const id = req.body.id
+
+    await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $unset: { [subInd]: 1 } }),
+      await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $pull: { "subscribers": null } }),
+      await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $push: { "friends": id } }),
+      UserSchema.findOneAndUpdate({ "_id": id }, { $push: { "friends": aboutId } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
+
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+          res.json(doc);
+        });
   } catch (err) {
     console.log(err);
     res.status(500).json({

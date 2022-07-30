@@ -58,8 +58,7 @@ export const deleteImgInSlider = async (req, res) => {
     const aboutId = req.userId;
     const index = req.body.deleteId
     const sliderInd = `sliderImg.${index}`
-    const id = req.params.id
-    let ObjectId = mongoose.Types.ObjectId
+
 
     await SliderModel.updateOne({ "user": aboutId }, { $unset: { [sliderInd]: 1 } })
     SliderModel.updateOne({ "user": aboutId }, { $pull: { "sliderImg": null } },

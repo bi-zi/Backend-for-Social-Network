@@ -198,6 +198,45 @@ export const pushComment = async (req, res) => {
   }
 };
 
+export const deleteComment = async (req, res) => {
+  try {
+    const aboutId = req.userId;
+    let ObjectId = mongoose.Types.ObjectId
+
+    const postId = req.body.postId
+    const index = req.body.index
+    const id = req.params.id
+    const path = `post.$.commentPost.${index}`
+
+    // await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $unset: { [subInd2]: 1 } })
+    // UserSchema.findOneAndUpdate({ "_id": aboutId }, { $pull: { "friends": null } },
+
+    await PostModel.findOneAndUpdate({ "post._id": ObjectId(postId) }, { $unset: { [path]: 1 } }),
+      PostModel.findOneAndUpdate({ "post._id": ObjectId(postId) }, { $pull: { "post.$.commentPost": null } },
+  (err, doc) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({
+        message: 'Не удалось вернуть статью',
+      });
+    }
+
+    if (!doc) {
+      return res.status(404).json({
+        message: 'Статья не найдена',
+      });
+    }
+    res.json(doc);
+  });
+} catch (err) {
+  console.log(err);
+  res.status(500).json({
+    message: 'Не удалось обновить fdf',
+  });
+}
+};
+
+
 
 export const deleteUserPost = async (req, res) => {
   try {
@@ -205,7 +244,7 @@ export const deleteUserPost = async (req, res) => {
     const aboutId = req.userId;
     const postInd = `post.${index}`
 
-    await PostModel.updateOne({"user": aboutId }, { $unset: { [postInd]: 1 } })
+    await PostModel.updateOne({ "user": aboutId }, { $unset: { [postInd]: 1 } })
     PostModel.updateOne({ "user": aboutId }, { $pull: { "post": null } },
       (err, doc) => {
 

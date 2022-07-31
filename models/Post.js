@@ -6,6 +6,15 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       required: false
     },
+    postId: {
+      type: String,
+      required: false,
+    },
+    index: {
+      type: Number,
+      required: false,
+    },
+
     post: {
       type: Array,
 

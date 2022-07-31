@@ -30,6 +30,11 @@ const UserSchema = new mongoose.Schema(
         required: false,
         default: ''
       },
+      index2: {
+        type: Number,
+        required: false,
+        default: ''
+      },
 
     },
     subscribers: {

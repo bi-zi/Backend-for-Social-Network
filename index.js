@@ -29,7 +29,10 @@ app.get('/user/all', UserController.getAllUsers)
 app.get('/user/one/:id', UserController.getOneUser)
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
 app.patch("/user/subscribe/:id", handleValidationErrors, UserController.subscribeUser)
+app.patch("/user/unsubscribe/:id", handleValidationErrors, UserController.unsubscribeUser)
 app.patch("/user/friend/:id", checkAuth, handleValidationErrors, UserController.acceptFriend)
+app.patch("/user/deleteFriend/:id", checkAuth, handleValidationErrors, UserController.deleteFriend)
+
 
 
 app.get('/about/all', AboutController.getAbout);
@@ -51,6 +54,7 @@ app.patch('/post/PostPush/:id', checkAuth, handleValidationErrors, PostControlle
 app.patch('/post/like/:id', handleValidationErrors, PostController.likePost);
 app.patch('/post/dislike/:id', handleValidationErrors, PostController.dislikePost);
 app.patch('/post/commentPush/:id', handleValidationErrors, PostController.pushComment);
+app.patch('/post/deleteComment/:id', handleValidationErrors, PostController.deleteComment);
 app.patch('/post/deletePost/:id', checkAuth, handleValidationErrors, PostController.deleteUserPost);
 
 app.listen(4444, (err) => {

@@ -6,6 +6,19 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       required: false
     },
+    postId: {
+      type: String,
+      required: false,
+    },
+    index: {
+      type: Number,
+      required: false,
+    },
+    likeDislike: {
+      type: Number,
+      required: false,
+    },
+
     post: {
       type: Array,
 
@@ -34,11 +47,6 @@ const PostSchema = new mongoose.Schema(
           required: true,
           default: ''
         },
-        avatar: {
-          type: String,
-          required: true,
-          default: ''
-        },
         commentText: {
           type: String,
           required: true,
@@ -57,14 +65,12 @@ const PostSchema = new mongoose.Schema(
       },
 
       likePost: {
-        type: Number,
+        type: Array,
         required: true,
-        default: '0',
       },
       dislikePost: {
-        type: Number,
+        type: Array,
         required: true,
-        default: '0',
       },
       date: {
         type: String,

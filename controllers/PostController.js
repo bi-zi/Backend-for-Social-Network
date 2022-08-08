@@ -26,8 +26,8 @@ export const createPost = async (req, res) => {
           videoPost: req.body.videoPost,
           imagesPost: req.body.imagesPost,
           commentPost: [],
-          likePost: 0,
-          dislikePost: 0,
+          likePost: [],
+          dislikePost: [],
           date: d,
           _id: mongoose.Types.ObjectId()
         }
@@ -64,8 +64,8 @@ export const pushPost = async (req, res) => {
             videoPost: req.body.videoPost,
             imagesPost: req.body.imagesPost,
             commentPost: [],
-            likePost: 0,
-            dislikePost: 0,
+            likePost: [],
+            dislikePost: [],
             date: d,
             _id: mongoose.Types.ObjectId()
           }
@@ -89,23 +89,51 @@ export const likePost = async (req, res) => {
     let ObjectId = mongoose.Types.ObjectId
     const id = req.body._id
     const aboutId = req.userId;
-    PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $inc: { "post.$.likePost": 1 } },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: 'Не удалось вернуть статью',
-          });
-        }
+    const like = req.body.likeDislike
+    let index = req.body.index
 
-        if (!doc) {
-          return res.status(404).json({
-            message: 'Статья не найдена',
-          });
-        }
+    if (index === 1) {
+      PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $push: { "post.$.likePost": like } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
 
-        res.json(doc);
-      });
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+
+          res.json(doc);
+        });
+    }
+
+    if (index === 0) {
+      const del = `post.$.likePost.${like}`
+      await PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $unset: { [del]: 1 } })
+      PostModel.findOneAndUpdate({ aboutId, "post._id": ObjectId(id) }, { $pull: { "post.$.likePost": null } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
+
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+
+          res.json(doc);
+        });
+    }
+
 
   } catch (err) {
     console.log(err);
@@ -115,29 +143,57 @@ export const likePost = async (req, res) => {
   }
 };
 
+
 export const dislikePost = async (req, res) => {
   try {
     let ObjectId = mongoose.Types.ObjectId
     const id = req.body._id
     const aboutId = req.userId;
-    let a = "62d7ce16aa9c6f1def4d4eaf"
-    PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $inc: { "post.$.dislikePost": 1 } },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: 'Не удалось вернуть статью',
-          });
-        }
+    const dislike = req.body.likeDislike
+    let index = req.body.index
 
-        if (!doc) {
-          return res.status(404).json({
-            message: 'Статья не найдена',
-          });
-        }
+    if (index === 1) {
+      PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $push: { "post.$.dislikePost": dislike } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
 
-        res.json(doc);
-      });
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+
+          res.json(doc);
+        });
+    }
+
+    if (index === 0) {
+      const del = `post.$.dislikePost.${dislike}`
+      await PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $unset: { [del]: 1 } })
+      PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $pull: { "post.$.dislikePost": null } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
+
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+
+          res.json(doc);
+        });
+    }
+
 
   } catch (err) {
     console.log(err);
@@ -167,7 +223,6 @@ export const pushComment = async (req, res) => {
         {
           "post.$.commentPost": {
             fullName: req.body.fullName,
-            avatar: req.body.avatar,
             commentText: req.body.commentText,
             commentDate: req.body.commentDate,
             userId: req.body.userId
@@ -187,7 +242,6 @@ export const pushComment = async (req, res) => {
             message: 'Статья не найдена',
           });
         }
-
         res.json(doc);
       });
 
@@ -199,38 +253,76 @@ export const pushComment = async (req, res) => {
   }
 };
 
-
-export const deleteUserPost = async (req, res) => {
+export const deleteComment = async (req, res) => {
   try {
-    const index = req.body.deleteId
     const aboutId = req.userId;
-    const postInd = `post.${index}`
+    let ObjectId = mongoose.Types.ObjectId
 
-    await PostModel.updateOne({ aboutId }, { $unset: { [postInd]: 1 } })
-    PostModel.updateOne({ aboutId }, { $pull: { "post": null } },
-      (err, doc) => {
+    const postId = req.body.postId
+    const index = req.body.index
+    const id = req.params.id
+    const path = `post.$.commentPost.${index}`
 
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: 'Не удалось вернуть статью',
-          });
-        }
+    // await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $unset: { [subInd2]: 1 } })
+    // UserSchema.findOneAndUpdate({ "_id": aboutId }, { $pull: { "friends": null } },
 
-        if (!doc) {
-          return res.status(404).json({
-            message: 'Статья не найдена',
-          });
-        }
+    await PostModel.findOneAndUpdate({ "post._id": ObjectId(postId) }, { $unset: { [path]: 1 } }),
+      PostModel.findOneAndUpdate({ "post._id": ObjectId(postId) }, { $pull: { "post.$.commentPost": null } },
+        (err, doc) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
 
-        res.json(doc);
-      });
-
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+          res.json(doc);
+        });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: 'Не удалось создать информацию',
+      message: 'Не удалось обновить fdf',
     });
   }
+}
 
-};
+
+  export const deleteUserPost = async (req, res) => {
+    try {
+      const index = req.body.deleteId
+      const aboutId = req.userId;
+      const postInd = `post.${index}`
+
+      await PostModel.updateOne({ "user": aboutId }, { $unset: { [postInd]: 1 } })
+      PostModel.updateOne({ "user": aboutId }, { $pull: { "post": null } },
+        (err, doc) => {
+
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              message: 'Не удалось вернуть статью',
+            });
+          }
+
+          if (!doc) {
+            return res.status(404).json({
+              message: 'Статья не найдена',
+            });
+          }
+
+          res.json(doc);
+        });
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        message: 'Не удалось создать информацию',
+      });
+    }
+
+  };

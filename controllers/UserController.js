@@ -40,6 +40,7 @@ export const updateUser = async (req, res) => {
     const aboutId = req.userId;
     const id = req.params.id
     let ObjectId = mongoose.Types.ObjectId
+    
     UserSchema.updateOne({ "_id": aboutId }, { $set: { imageUrl: req.body.imageUrl } }, (err, doc) => {
       if (err) {
         console.log(err);

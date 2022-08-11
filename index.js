@@ -1,15 +1,18 @@
+import 'dotenv/config'
 import express from 'express';
-
 import cors from 'cors';
-
 import mongoose from 'mongoose';
 
 import { registerValidation, loginValidation, aboutValidation, sliderValidation } from './validations.js';
 import { handleValidationErrors, checkAuth } from './utils/index.js';
 
-import { AuthController, UserController, AboutController, SliderController, PostController, NotificationsController } from './controllers/index.js';
+import {
+  AuthController, UserController, AboutController,
+  SliderController, PostController, NotificationsController,
+  MessagesController
+} from './controllers/index.js';
 
-mongoose.connect('mongodb+srv://bi_zi:Superbizi18@cluster0.g2dffl4.mongodb.net/blog?retryWrites=true&w=majority')
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.g2dffl4.mongodb.net/blog?retryWrites=true&w=majority`)
   .then(() => console.log('DB ok'))
   .catch((err) => console.log('DB error', err))
 
@@ -64,6 +67,15 @@ app.post('/notifications/createNotifications', handleValidationErrors, Notificat
 app.patch('/notifications/pushNotifications', handleValidationErrors, NotificationsController.pushNotifications);
 app.patch('/notifications/deleteNotifications', checkAuth, handleValidationErrors, NotificationsController.deleteNotifications);
 app.patch('/notifications/deleteRequest', handleValidationErrors, NotificationsController.deleteRequest);
+
+
+
+
+app.get('/messages/all', handleValidationErrors, MessagesController.getMessages);
+app.post('/messages/createMessages', handleValidationErrors, MessagesController.createMessages);
+app.patch('/messages/pushChat', handleValidationErrors, MessagesController.pushChat);
+app.patch('/messages/addMessage', handleValidationErrors, MessagesController.addMessage);
+
 
 
 

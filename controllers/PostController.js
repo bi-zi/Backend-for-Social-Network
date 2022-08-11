@@ -174,6 +174,7 @@ export const dislikePost = async (req, res) => {
 
     if (index === 0) {
       const del = `post.$.dislikePost.${dislike}`
+      
       await PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $unset: { [del]: 1 } })
       PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $pull: { "post.$.dislikePost": null } },
         (err, doc) => {

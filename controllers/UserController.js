@@ -40,7 +40,7 @@ export const updateUser = async (req, res) => {
     const aboutId = req.userId;
     const id = req.params.id
     let ObjectId = mongoose.Types.ObjectId
-    
+
     UserSchema.updateOne({ "_id": aboutId }, { $set: { imageUrl: req.body.imageUrl } }, (err, doc) => {
       if (err) {
         console.log(err);
@@ -172,6 +172,7 @@ export const deleteFriend = async (req, res) => {
     await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $unset: { [subInd2]: 1 } })
     await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $pull: { "friends": null } })
     await UserSchema.findOneAndUpdate({ "_id": aboutId }, { $push: { "subscribers": id } }),
+      await UserSchema.findOneAndUpdate({ "_id": id }, { $unset: { [subInd]: 1 } })
     UserSchema.findOneAndUpdate({ "_id": id }, { $pull: { "friends": null } },
       (err, doc) => {
         if (err) {

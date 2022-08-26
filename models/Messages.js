@@ -15,8 +15,10 @@ const MessagesSchema = new mongoose.Schema(
 
     correspondence: {
       type: Array,
+
       messages: {
         type: Array,
+
         message: {
           type: Array,
           required: true,
@@ -32,6 +34,10 @@ const MessagesSchema = new mongoose.Schema(
           required: true,
         },
         userId: {
+          type: String,
+          required: true,
+        },
+        withWho: {
           type: String,
           required: true,
         }

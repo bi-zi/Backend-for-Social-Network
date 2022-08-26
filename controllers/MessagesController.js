@@ -1,7 +1,4 @@
 import MessagesModel from '../models/Messages.js';
-import mongoose from 'mongoose';
-
-
 
 export const getMessages = async (req, res) => {
   try {
@@ -22,10 +19,7 @@ export const createMessages = async (req, res) => {
   try {
 
     const doc = new MessagesModel({
-      correspondence: [{
-        messsages: [],
-        withWho: req.body.withWho
-      }],
+      correspondence: [],
 
       user: req.body.user
 
@@ -47,12 +41,12 @@ export const createMessages = async (req, res) => {
 
 export const pushChat = async (req, res) => {
   try {
-
+    let d = new Date();
     await MessagesModel.findOneAndUpdate({ "user": req.body.user }, {
-      $push: { "correspondence": { messages: [], withWho: req.body.withWho } }
+      $push: { "correspondence": { messages: [{ withWho: req.body.withWho, date: d }], withWho: req.body.withWho } }
     }),
       MessagesModel.findOneAndUpdate({ "user": req.body.withWho }, {
-        $push: { "correspondence": { messages: [], withWho: req.body.user } }
+        $push: { "correspondence": { messages: [{ withWho: req.body.user, date: d }], withWho: req.body.user } }
       },
         (err, doc) => {
           if (err) {
@@ -82,8 +76,6 @@ export const pushChat = async (req, res) => {
 export const addMessage = async (req, res) => {
   try {
     let d = new Date();
-    d = `${d.toLocaleDateString()} ${d.toLocaleTimeString()}`;
-
     const yourIndex = `correspondence.${req.body.yourIndex}.messages`
     const hisIndex = `correspondence.${req.body.hisIndex}.messages`
 
@@ -91,14 +83,14 @@ export const addMessage = async (req, res) => {
       {
         $push: {
           [yourIndex]:
-            { message: req.body.message, date: d, userId: req.body.userId }
+            { message: req.body.message, date: d, userId: req.body.userId, withWho: req.body.withWho }
         }
       })
     MessagesModel.findOneAndUpdate({ "user": req.body.withWho },
       {
         $push: {
           [hisIndex]:
-            { message: req.body.message, date: d, userId: req.body.userId }
+            { message: req.body.message, date: d, userId: req.body.userId, withWho: req.body.user }
         }
       },
       (err, doc) => {

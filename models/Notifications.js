@@ -39,3 +39,4 @@ const NotificationsSchema = new mongoose.Schema(
 
 
 export default mongoose.model('Notifications', NotificationsSchema);
+

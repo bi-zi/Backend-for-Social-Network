@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
+
 import { registerValidation, loginValidation, aboutValidation, sliderValidation } from './validations.js';
 import { handleValidationErrors, checkAuth } from './utils/index.js';
 
@@ -12,9 +13,11 @@ import {
   MessagesController
 } from './controllers/index.js';
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASS}@cluster0.g2dffl4.mongodb.net/blog?retryWrites=true&w=majority`)
+
+mongoose.connect(`mongodb+srv://${process.env.MONGO}@cluster0.g2dffl4.mongodb.net/blog?retryWrites=true&w=majority`)
   .then(() => console.log('DB ok'))
   .catch((err) => console.log('DB error', err))
+
 
 const app = express();
 
@@ -71,17 +74,17 @@ app.patch('/notifications/deleteRequest', handleValidationErrors, NotificationsC
 
 
 
-app.get('/messages/all', handleValidationErrors, MessagesController.getMessages);
+app.get('/messages/all', checkAuth, handleValidationErrors, MessagesController.getMessages);
 app.post('/messages/createMessages', handleValidationErrors, MessagesController.createMessages);
 app.patch('/messages/pushChat', handleValidationErrors, MessagesController.pushChat);
 app.patch('/messages/addMessage', handleValidationErrors, MessagesController.addMessage);
 
 
 
-
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.log(err);
   }
+  console.log(process.env.MONGO)
   console.log('Server OK');
 });

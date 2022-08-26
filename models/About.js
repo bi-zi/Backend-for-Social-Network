@@ -37,3 +37,6 @@ const AboutSchema = new mongoose.Schema(
   },
 )
 export default mongoose.model('About', AboutSchema);
+
+
+

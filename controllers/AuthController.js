@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import UserSchema from '../models/User.js';
+import 'dotenv/config'
 
 
 export const register = async (req, res) => {
@@ -22,7 +23,7 @@ export const register = async (req, res) => {
       {
         _id: user._id,
       },
-      'secret123',
+      process.env.SECRET_JWT,
       {
         expiresIn: '30d',
       },
@@ -64,7 +65,7 @@ export const login = async (req, res) => {
       {
         _id: user._id,
       },
-      'secret123',
+      process.env.SECRET_JWT,
       {
         expiresIn: '30d',
       },

@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 
 export const getSlider = async (req, res) => {
   try {
-    const slider = await SliderModel.find().populate('_id').exec();
+    const slider = await SliderModel.findOne({ "user": req.params.id});
 
-    res.json(slider);
+    res.json([slider]);
   } catch (err) {
     console.log(err);
     res.status(500).json({

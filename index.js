@@ -47,7 +47,7 @@ app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, Abou
 
 
 
-app.get('/slider/all', SliderController.getSlider);
+app.get('/slider/:id', SliderController.getSlider);
 app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
 app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
 app.patch('/slider/delete/:id', checkAuth, handleValidationErrors, SliderController.deleteImgInSlider);
@@ -85,6 +85,5 @@ app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.log(err);
   }
-  console.log(process.env.MONGO)
   console.log('Server OK');
 });

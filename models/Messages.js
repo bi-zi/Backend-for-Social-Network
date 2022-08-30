@@ -13,6 +13,11 @@ const MessagesSchema = new mongoose.Schema(
       required: false,
     },
 
+    ID: {
+      type: String,
+      required: false,
+    },
+
     correspondence: {
       type: Array,
 

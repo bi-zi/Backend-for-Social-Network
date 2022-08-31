@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 
 export const userPostsAll = async (req, res) => {
   try {
-    const aboutId = req.userId;
-    const posts = await PostModel.find().populate(aboutId).exec();
-    res.json(posts);
+
+    const posts = await PostModel.findOne({ user: req.params.id })
+    res.json([posts]);
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -174,7 +174,7 @@ export const dislikePost = async (req, res) => {
 
     if (index === 0) {
       const del = `post.$.dislikePost.${dislike}`
-      
+
       await PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $unset: { [del]: 1 } })
       PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $pull: { "post.$.dislikePost": null } },
         (err, doc) => {

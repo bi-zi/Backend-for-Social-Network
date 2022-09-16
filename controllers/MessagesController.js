@@ -2,9 +2,9 @@ import MessagesModel from '../models/Messages.js';
 
 export const getMessages = async (req, res) => {
   try {
-
-    const posts = await MessagesModel.find().populate("user").exec();
-    res.json(posts);
+console.log(req.params.id)
+    const posts = await MessagesModel.findOne({ user: req.params.id })
+    res.json([posts]);
   } catch (err) {
 
     console.log(err);

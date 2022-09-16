@@ -41,7 +41,7 @@ app.patch("/user/deleteFriend/:id", checkAuth, handleValidationErrors, UserContr
 
 
 
-app.get('/about/all', AboutController.getAbout);
+app.get('/about/:id', AboutController.getAbout);
 app.post('/about', checkAuth, aboutValidation, handleValidationErrors, AboutController.createAbout);
 app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, AboutController.updateAbout);
 
@@ -74,7 +74,7 @@ app.patch('/notifications/deleteRequest', handleValidationErrors, NotificationsC
 
 
 
-app.get('/messages/all', checkAuth, handleValidationErrors, MessagesController.getMessages);
+app.get('/messages/:id', checkAuth, handleValidationErrors, MessagesController.getMessages);
 app.post('/messages/createMessages', handleValidationErrors, MessagesController.createMessages);
 app.patch('/messages/pushChat', handleValidationErrors, MessagesController.pushChat);
 app.patch('/messages/addMessage', handleValidationErrors, MessagesController.addMessage);

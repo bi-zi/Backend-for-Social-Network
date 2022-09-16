@@ -2,7 +2,7 @@ import AboutModel from '../models/About.js';
 
 export const getAbout = async (req, res) => {
   try {
-    const about = await AboutModel.find().populate('_id').exec();
+    const about = await AboutModel.findOne({ user: req.params.id.split('}')[0] })
 
     res.json(about);
   } catch (err) {

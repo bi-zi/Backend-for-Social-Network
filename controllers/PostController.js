@@ -223,7 +223,8 @@ export const pushComment = async (req, res) => {
         $push:
         {
           "post.$.commentPost": {
-            fullName: req.body.fullName,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
             commentText: req.body.commentText,
             commentDate: req.body.commentDate,
             userId: req.body.userId

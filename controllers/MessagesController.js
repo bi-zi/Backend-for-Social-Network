@@ -2,7 +2,6 @@ import MessagesModel from '../models/Messages.js';
 
 export const getMessages = async (req, res) => {
   try {
-console.log(req.params.id)
     const posts = await MessagesModel.findOne({ user: req.params.id })
     res.json([posts]);
   } catch (err) {

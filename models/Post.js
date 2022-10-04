@@ -42,7 +42,12 @@ const PostSchema = new mongoose.Schema(
         type: Array,
         required: true,
 
-        fullName: {
+        firstName: {
+          type: String,
+          required: true,
+          default: ''
+        },
+        lastName: {
           type: String,
           required: true,
           default: ''

@@ -33,6 +33,9 @@ app.get('/auth/me', checkAuth, AuthController.getMe);
 
 app.get('/user/all', UserController.getAllUsers)
 app.get('/user/one/:id', UserController.getOneUser)
+app.get('/user/findFriends/:id', UserController.getFindFriends)
+app.get('/user/findSubscribers/:id', UserController.getFindSubscribers)
+
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
 app.patch("/user/subscribe/:id", handleValidationErrors, UserController.subscribeUser)
 app.patch("/user/unsubscribe/:id", handleValidationErrors, UserController.unsubscribeUser)
@@ -48,6 +51,7 @@ app.patch('/about/:id', checkAuth, aboutValidation, handleValidationErrors, Abou
 
 
 app.get('/slider/:id', SliderController.getSlider);
+// app.get('/slider/all', SliderController.getAllSliders);
 app.post('/slider', checkAuth, sliderValidation, handleValidationErrors, SliderController.createSlider);
 app.patch('/slider/push/:id', checkAuth, sliderValidation, handleValidationErrors, SliderController.pushSlider);
 app.patch('/slider/delete/:id', checkAuth, handleValidationErrors, SliderController.deleteImgInSlider);

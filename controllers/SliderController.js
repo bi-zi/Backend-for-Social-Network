@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 export const getSlider = async (req, res) => {
   try {
-    const slider = await SliderModel.findOne({ "user": req.params.id});
+    const slider = await SliderModel.findOne({ "user": req.params.id });
 
     res.json([slider]);
   } catch (err) {
@@ -13,6 +13,20 @@ export const getSlider = async (req, res) => {
     });
   }
 };
+
+
+// export const getAllSliders = async (req, res) => {
+//   try {
+//     const slider = await SliderModel.find().populate('_id').exec();
+
+//     res.json([slider]);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({
+//       message: 'Не удалось получить информацию',
+//     });
+//   }
+// };
 
 export const createSlider = async (req, res) => {
   try {

@@ -35,6 +35,51 @@ export const getOneUser = async (req, res) => {
 
 };
 
+
+export const getFindFriends = async (req, res) => {
+  try {
+
+    const ObjectId = mongoose.Types.ObjectId
+    const id = req.params.id
+    const user = await UserSchema.find({ "_id": ObjectId(id) })
+
+    const find = await UserSchema.find({ "_id": { $in: user[0].friends } })
+
+    res.json(find);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить пользователя',
+    });
+  }
+
+};
+
+export const getFindSubscribers = async (req, res) => {
+  try {
+
+    const ObjectId = mongoose.Types.ObjectId
+    const id = req.params.id
+    const user = await UserSchema.find({ "_id": ObjectId(id) })
+
+    const find = await UserSchema.find({ "_id": { $in: user[0].subscribers } })
+
+    res.json(find);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить пользователя',
+    });
+  }
+
+};
+
+
+
 export const updateUser = async (req, res) => {
   try {
     const aboutId = req.userId;

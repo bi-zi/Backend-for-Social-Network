@@ -20,6 +20,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
     friends: {
       type: Array,
       required: true,
@@ -29,6 +30,7 @@ const UserSchema = new mongoose.Schema(
         required: false,
         default: ''
       },
+
 
       index: {
         type: Number,
@@ -42,6 +44,7 @@ const UserSchema = new mongoose.Schema(
       },
 
     },
+
     subscribers: {
       type: Array,
       required: true,
@@ -63,7 +66,11 @@ const UserSchema = new mongoose.Schema(
       type: Array,
       required: false
     }
+
+
   },
+
+
   {
     timestamps: true,
   },

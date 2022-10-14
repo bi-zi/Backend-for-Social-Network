@@ -1,11 +1,34 @@
 import UserSchema from '../models/User.js';
+import MessagesModel from '../models/Messages.js';
 import mongoose from 'mongoose';
 
 export const getAllUsers = async (req, res) => {
   try {
 
     const users = await UserSchema.find().populate('_id').exec();
+
     res.json(users);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+
+};
+
+export const getUsersPagination = async (req, res) => {
+  try {
+
+    const pagination = req.params.id < 11 ? 10 : +req.params.id
+
+    const users = await UserSchema.find().populate('_id').exec();
+
+    users.slice(0, pagination)
+
+    res.json([pagination, users.length, users.slice(0, pagination)]);
 
   } catch (err) {
 
@@ -22,6 +45,7 @@ export const getOneUser = async (req, res) => {
     const ObjectId = mongoose.Types.ObjectId
     const id = req.params.id
     const user = await UserSchema.find({ "_id": ObjectId(id) })
+
 
     res.json(user);
 
@@ -78,6 +102,46 @@ export const getFindSubscribers = async (req, res) => {
 
 };
 
+export const getFindChats = async (req, res) => {
+  try {
+    const id = req.params.id.split('}').join('')
+    const chat = await MessagesModel.find({ "user": id })
+
+    const userid = (chat[0].correspondence.map(x => x.withWho) + ',' + id).split(',')
+
+    const find = await UserSchema.find({ "_id": { $in: userid } })
+
+    res.json(find);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить пользователя',
+    });
+  }
+
+};
+
+
+export const getСommentators = async (req, res) => {
+  try {
+    const id = req.params.id.split('}').join('').split(',')
+    console.log(id)
+
+    const find = await UserSchema.find({ "_id": { $in: id } })
+
+    res.json(find);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить пользователя',
+    });
+  }
+
+};
 
 
 export const updateUser = async (req, res) => {

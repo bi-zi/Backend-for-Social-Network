@@ -32,9 +32,14 @@ app.get('/auth/me', checkAuth, AuthController.getMe);
 
 
 app.get('/user/all', UserController.getAllUsers)
+app.get('/user/pagination/:id', UserController.getUsersPagination)
+
 app.get('/user/one/:id', UserController.getOneUser)
 app.get('/user/findFriends/:id', UserController.getFindFriends)
 app.get('/user/findSubscribers/:id', UserController.getFindSubscribers)
+
+app.get('/user/findChats/:id', UserController.getFindChats)
+app.get('/user/findCommentators/:id', UserController.getСommentators)
 
 app.patch('/user/:id', checkAuth, handleValidationErrors, UserController.updateUser);
 app.patch("/user/subscribe/:id", handleValidationErrors, UserController.subscribeUser)
@@ -79,6 +84,7 @@ app.patch('/notifications/deleteRequest', handleValidationErrors, NotificationsC
 
 
 app.get('/messages/:id', checkAuth, handleValidationErrors, MessagesController.getMessages);
+app.get('/messages/user/:id', checkAuth, handleValidationErrors, MessagesController.getMessages);
 app.post('/messages/createMessages', handleValidationErrors, MessagesController.createMessages);
 app.patch('/messages/pushChat', handleValidationErrors, MessagesController.pushChat);
 app.patch('/messages/addMessage', handleValidationErrors, MessagesController.addMessage);

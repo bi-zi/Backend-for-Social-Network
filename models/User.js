@@ -62,11 +62,16 @@ const UserSchema = new mongoose.Schema(
       },
 
     },
+
     imageUrl: {
       type: Array,
       required: false
-    }
+    },
 
+    pagination: {
+      type: Number,
+      required: false,
+    }
 
   },
 

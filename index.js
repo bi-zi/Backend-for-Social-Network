@@ -35,6 +35,8 @@ app.get('/user/all', UserController.getAllUsers)
 app.get('/user/pagination/:id', UserController.getUsersPagination)
 
 app.get('/user/one/:id', UserController.getOneUser)
+app.get('/user/main/:id', UserController.getMainUser)
+
 app.get('/user/findFriends/:id', UserController.getFindFriends)
 app.get('/user/findSubscribers/:id', UserController.getFindSubscribers)
 

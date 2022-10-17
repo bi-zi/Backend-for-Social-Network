@@ -13,18 +13,6 @@ export const getMessages = async (req, res) => {
   }
 };
 
-export const getMessagesUser = async (req, res) => {
-  try {
-    const posts = await MessagesModel.findOne({ user: req.params.id })
-    res.json([]);
-  } catch (err) {
-
-    console.log(err);
-    res.status(500).json({
-      message: 'Не удалось получить статьи',
-    });
-  }
-};
 
 
 export const createMessages = async (req, res) => {

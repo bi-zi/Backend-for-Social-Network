@@ -40,6 +40,27 @@ export const getUsersPagination = async (req, res) => {
 
 };
 
+export const getMainUser = async (req, res) => {
+  try {
+    const ObjectId = mongoose.Types.ObjectId
+    const id = req.params.id
+
+    const user = await UserSchema.find({ "_id": ObjectId(id) })
+
+    console.log(user[0])
+    res.json(user);
+
+  } catch (err) {
+
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось получить статьи',
+    });
+  }
+
+};
+
+
 export const getOneUser = async (req, res) => {
   try {
     const ObjectId = mongoose.Types.ObjectId
@@ -127,7 +148,6 @@ export const getFindChats = async (req, res) => {
 export const getСommentators = async (req, res) => {
   try {
     const id = req.params.id.split('}').join('').split(',')
-    console.log(id)
 
     const find = await UserSchema.find({ "_id": { $in: id } })
 

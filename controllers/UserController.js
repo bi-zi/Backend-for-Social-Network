@@ -47,7 +47,6 @@ export const getMainUser = async (req, res) => {
 
     const user = await UserSchema.find({ "_id": ObjectId(id) })
 
-    console.log(user[0])
     res.json(user);
 
   } catch (err) {
@@ -167,8 +166,6 @@ export const getСommentators = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const aboutId = req.userId;
-    const id = req.params.id
-    let ObjectId = mongoose.Types.ObjectId
 
     UserSchema.updateOne({ "_id": aboutId }, { $set: { imageUrl: req.body.imageUrl } }, (err, doc) => {
       if (err) {

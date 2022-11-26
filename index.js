@@ -93,7 +93,7 @@ app.patch('/messages/addMessage', handleValidationErrors, MessagesController.add
 
 
 
-app.listen(process.env.PORT || 4444, (err) => {
+app.listen(process.env.PORT || 3500, (err) => {
   if (err) {
     return console.log(err);
   }

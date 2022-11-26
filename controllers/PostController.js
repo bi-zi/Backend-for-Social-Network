@@ -88,9 +88,11 @@ export const likePost = async (req, res) => {
   try {
     let ObjectId = mongoose.Types.ObjectId
     const id = req.body._id
-    const aboutId = req.userId;
+    const aboutId = req.params.id;
     const like = req.body.likeDislike
     let index = req.body.index
+
+
 
     if (index === 1) {
       PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $push: { "post.$.likePost": like } },
@@ -129,7 +131,6 @@ export const likePost = async (req, res) => {
               message: 'Статья не найдена',
             });
           }
-
           res.json(doc);
         });
     }
@@ -151,6 +152,7 @@ export const dislikePost = async (req, res) => {
     const aboutId = req.userId;
     const dislike = req.body.likeDislike
     let index = req.body.index
+
 
     if (index === 1) {
       PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $push: { "post.$.dislikePost": dislike } },
@@ -176,7 +178,7 @@ export const dislikePost = async (req, res) => {
       const del = `post.$.dislikePost.${dislike}`
 
       await PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $unset: { [del]: 1 } })
-      PostModel.updateOne({ aboutId, "post._id": ObjectId(id) }, { $pull: { "post.$.dislikePost": null } },
+      PostModel.findOneAndUpdate({ aboutId, "post._id": ObjectId(id) }, { $pull: { "post.$.dislikePost": null } },
         (err, doc) => {
           if (err) {
             console.log(err);
@@ -190,7 +192,6 @@ export const dislikePost = async (req, res) => {
               message: 'Статья не найдена',
             });
           }
-
           res.json(doc);
         });
     }
@@ -294,37 +295,37 @@ export const deleteComment = async (req, res) => {
 }
 
 
-  export const deleteUserPost = async (req, res) => {
-    try {
-      const index = req.body.deleteId
-      const aboutId = req.userId;
-      const postInd = `post.${index}`
+export const deleteUserPost = async (req, res) => {
+  try {
+    const index = req.body.deleteId
+    const aboutId = req.userId;
+    const postInd = `post.${index}`
 
-      await PostModel.updateOne({ "user": aboutId }, { $unset: { [postInd]: 1 } })
-      PostModel.updateOne({ "user": aboutId }, { $pull: { "post": null } },
-        (err, doc) => {
+    await PostModel.updateOne({ "user": aboutId }, { $unset: { [postInd]: 1 } })
+    PostModel.updateOne({ "user": aboutId }, { $pull: { "post": null } },
+      (err, doc) => {
 
-          if (err) {
-            console.log(err);
-            return res.status(500).json({
-              message: 'Не удалось вернуть статью',
-            });
-          }
+        if (err) {
+          console.log(err);
+          return res.status(500).json({
+            message: 'Не удалось вернуть статью',
+          });
+        }
 
-          if (!doc) {
-            return res.status(404).json({
-              message: 'Статья не найдена',
-            });
-          }
+        if (!doc) {
+          return res.status(404).json({
+            message: 'Статья не найдена',
+          });
+        }
 
-          res.json(doc);
-        });
-
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({
-        message: 'Не удалось создать информацию',
+        res.json(doc);
       });
-    }
 
-  };
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Не удалось создать информацию',
+    });
+  }
+
+};

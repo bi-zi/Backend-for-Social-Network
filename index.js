@@ -3,6 +3,8 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
+import router from './src/router/index.js'
+
 
 import { registerValidation, loginValidation, aboutValidation, sliderValidation } from './validations.js';
 import { handleValidationErrors, checkAuth } from './utils/index.js';
@@ -12,17 +14,25 @@ import {
   SliderController, PostController, NotificationsController,
   MessagesController
 } from './controllers/index.js';
+import cookieParser from 'cookie-parser';
+
+import errorMiddleware from './src/middlewares/error-middleware.js';
 
 
-mongoose.connect(`mongodb+srv://${process.env.MONGO}@cluster0.g2dffl4.mongodb.net/blog?retryWrites=true&w=majority`)
+mongoose.connect(`mongodb+srv://${process.env.MONGO}@cluster0.g2dffl4.mongodb.net/blog?retryWrites=true&w=majority`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
   .then(() => console.log('DB ok'))
   .catch((err) => console.log('DB error', err))
 
 
+
 const app = express();
-
-
+app.use(cookieParser())
 app.use(express.json({ limit: '1mb' }), cors());
+app.use('/api', router)
+app.use(errorMiddleware)
 
 
 app.post('/auth/login', loginValidation, handleValidationErrors, AuthController.login);
@@ -93,7 +103,8 @@ app.patch('/messages/addMessage', handleValidationErrors, MessagesController.add
 
 
 
-app.listen(process.env.PORT || 3500, (err) => {
+app.listen(process.env.PORT, (err) => {
+
   if (err) {
     return console.log(err);
   }

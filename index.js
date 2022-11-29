@@ -31,8 +31,8 @@ mongoose.connect(`mongodb+srv://${process.env.MONGO}@cluster0.g2dffl4.mongodb.ne
 const app = express();
 app.use(cookieParser())
 app.use(express.json({ limit: '1mb' }), cors());
-app.use('/api', router)
-app.use(errorMiddleware)
+// app.use('/api', router)
+// app.use(errorMiddleware)
 
 
 app.post('/auth/login', loginValidation, handleValidationErrors, AuthController.login);

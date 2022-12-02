@@ -5,28 +5,28 @@ const UserSchema = new Schema(
 
     login: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
     },
 
     firstName: {
       type: String,
-      required: true,
+      required: false,
     },
 
     lastName: {
       type: String,
-      required: true,
+      required: false,
     },
 
     gender: {
       type: String,
-      required: true,
+      required: false,
     },
 
-    age: {
-      type: Number,
-      required: true,
+    birdayDate: {
+      type: String,
+      required: false,
     },
 
     email: {
@@ -43,7 +43,7 @@ const UserSchema = new Schema(
 
     friends: {
       type: Array,
-      required: true,
+      required: false,
 
       user: {
         type: String,
@@ -59,7 +59,7 @@ const UserSchema = new Schema(
 
     subscribers: {
       type: Array,
-      required: true,
+      required: false,
 
       user: {
         type: String,
@@ -76,29 +76,29 @@ const UserSchema = new Schema(
     avatar: {
       image: {
         type: String,
-        required: true,
+        required: false,
       },
 
       sizeUpTo: {
         type: String,
-        required: true,
+        required: false,
       },
 
       sizeAfter: {
         type: String,
-        required: true,
+        required: false,
       }
     },
 
 
     wasOnline: {
       type: String,
-      required: true,
+      required: false,
     },
 
     online: {
       type: Boolean,
-      required: true,
+      required: false,
       default: false,
     },
 
